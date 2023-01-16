@@ -10,10 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlintry.databinding.ActivityMainBinding
 import com.example.kotlintry.repositoryAll.repository1.HttpRequestManager
-import com.example.kotlintry.viewModel.FourthViewModel
-import com.example.kotlintry.viewModel.MainActivityViewModel
-import com.example.kotlintry.viewModel.SecondViewModel
-import com.example.kotlintry.viewModel.ThirdViewModel
+import com.example.kotlintry.viewModel.*
 
 /**
  * 这个项目主要用来测试封装和kotlin的各种特性
@@ -32,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private var secondViewModel : SecondViewModel ?= null
     private var thirdViewModel : ThirdViewModel ?= null
     private var fourthViewModel : FourthViewModel ?= null
+    private var fifthViewModel : FifthViewModel ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -41,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         secondViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[SecondViewModel::class.java]
         thirdViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[ThirdViewModel::class.java]
         fourthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[FourthViewModel::class.java]
+        fifthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[FifthViewModel::class.java]
         mainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         mainBinding?.apply {
@@ -67,6 +66,11 @@ class MainActivity : AppCompatActivity() {
         fourthViewModel?.listData?.observe(this){
 //            Log.i(TAG, "onCreate: ${it.archives}")
             mainBinding!!.textView1.text = it.archives.toString()
+        }
+        fifthViewModel?.listData?.observe(this){ result ->
+            result.onSuccess {
+                mainBinding!!.textView1.text = it.archives.toString()
+            }
         }
 
     }
@@ -103,6 +107,10 @@ class MainActivity : AppCompatActivity() {
                 "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
         }
 
+        fun useRep5(){
+            fifthViewModel?.getList(mapOf("mid" to "11736402","season_id" to "23870",
+                "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
+        }
 
     }
 
