@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private var thirdViewModel : ThirdViewModel ?= null
     private var fourthViewModel : FourthViewModel ?= null
     private var fifthViewModel : FifthViewModel ?= null
+    private var sixthViewModel : SixthViewModel ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         thirdViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[ThirdViewModel::class.java]
         fourthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[FourthViewModel::class.java]
         fifthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[FifthViewModel::class.java]
+        sixthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[SixthViewModel::class.java]
         mainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         mainBinding?.apply {
@@ -72,7 +74,10 @@ class MainActivity : AppCompatActivity() {
                 mainBinding!!.textView1.text = it.archives.toString()
             }
         }
-
+        sixthViewModel?.listData?.observe(this){
+//            Log.i(TAG, "onCreate: ${it.archives}")
+            mainBinding!!.textView1.text = it.archives.toString()
+        }
     }
 
     inner class ClickProxy{
@@ -110,6 +115,21 @@ class MainActivity : AppCompatActivity() {
         fun useRep5(){
             fifthViewModel?.getList(mapOf("mid" to "11736402","season_id" to "23870",
                 "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
+        }
+
+        fun useRep6(){
+//            sixthViewModel?.getListFlow/*getListByT*/ /*getListByResult*/ /*getList*/ (mapOf("mid" to "11736402","season_id" to "23870",
+//                "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
+            sixthViewModel?.getListFlowByState(
+                mapOf("mid" to "11736402","season_id" to "23870",
+                    "sort_reverse" to "false","page_num" to "1","page_size" to "30"),
+                ifSuccess = {
+                    Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT ).show()
+                },
+                ifError = {
+                    Log.e(TAG, "useRep6: $it?")
+                }
+            )
         }
 
     }
