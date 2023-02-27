@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun usePagingRep(){
-            val pageMap = mapOf("page" to "1",
+            val pageMap = mutableMapOf("page" to "1",
                 "page_size" to "10",
             "order" to "pubdate",
             "keyword" to "赦免者",

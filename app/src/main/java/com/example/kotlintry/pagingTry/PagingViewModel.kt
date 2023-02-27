@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.kotlintry.viewModel.DataResult
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -18,7 +21,7 @@ class PagingViewModel : ViewModel(){
     val listData :MutableLiveData<List<BilibiliVideo>> = MutableLiveData()
 
 
-    fun getListFlow(map: Map<String,String>){
+    fun getListFlow(map: MutableMap<String,String>){
         viewModelScope.launch {
             repository.getListFlow(map).collect(){
                 when(it){
@@ -39,6 +42,10 @@ class PagingViewModel : ViewModel(){
                 Log.i(TAG, "getCookie: $it")
             }
         }
+    }
+
+    fun getPagingData():Flow<PagingData<BilibiliVideo>>{
+        return PagingRepository.getPagingData().cachedIn(viewModelScope)
     }
 
 }

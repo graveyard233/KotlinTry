@@ -1,6 +1,9 @@
 package com.example.kotlintry.pagingTry
 
 import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.kotlintry.repositoryAll.repository6.BaseRepository
 import com.example.kotlintry.viewModel.DataResult
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +16,7 @@ import java.io.IOException
 
 object PagingRepository : BaseRepository() {
     const val TAG = "PagingRepository"
-    suspend fun getListFlow(map: Map<String,String>) :Flow<DataResult<VideoSearchData<BilibiliVideo>>>
+    suspend fun getListFlow(map: MutableMap<String,String>) :Flow<DataResult<VideoSearchData<BilibiliVideo>>>
     {
         return flow {
             val response = BilibiliApi.service.getSearchList(map)
@@ -60,6 +63,16 @@ object PagingRepository : BaseRepository() {
         }.catch {
             Log.e(TAG, "getRetrofitCookie: ${it.message}")
         }.flowOn(Dispatchers.IO)
+    }
+
+    private const val PAGE_SIZE = 10
+    fun getPagingData():Flow<PagingData<BilibiliVideo>>{
+        return Pager(
+            config = PagingConfig(PAGE_SIZE),
+            pagingSourceFactory = {
+                RepoPagingSource()
+            }
+        ).flow
     }
 
 }
