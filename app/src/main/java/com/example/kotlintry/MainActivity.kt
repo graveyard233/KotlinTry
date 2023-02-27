@@ -9,6 +9,7 @@ import androidx.core.view.WindowCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlintry.databinding.ActivityMainBinding
+import com.example.kotlintry.pagingTry.PagingViewModel
 import com.example.kotlintry.repositoryAll.repository1.HttpRequestManager
 import com.example.kotlintry.viewModel.*
 
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     private var fifthViewModel : FifthViewModel ?= null
     private var sixthViewModel : SixthViewModel ?= null
 
+    private var pagingViewModel : PagingViewModel ?= null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
@@ -42,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         fourthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[FourthViewModel::class.java]
         fifthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[FifthViewModel::class.java]
         sixthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[SixthViewModel::class.java]
+        pagingViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[PagingViewModel::class.java]
         mainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         mainBinding?.apply {
@@ -78,6 +82,8 @@ class MainActivity : AppCompatActivity() {
 //            Log.i(TAG, "onCreate: ${it.archives}")
             mainBinding!!.textView1.text = it.archives.toString()
         }
+
+        pagingViewModel?.getCookie()
     }
 
     inner class ClickProxy{
@@ -130,6 +136,16 @@ class MainActivity : AppCompatActivity() {
                     Log.e(TAG, "useRep6: $it?")
                 }
             )
+        }
+
+        fun usePagingRep(){
+            val pageMap = mapOf("page" to "1",
+                "page_size" to "10",
+            "order" to "pubdate",
+            "keyword" to "赦免者",
+            "search_type" to "video")
+            pagingViewModel?.getListFlow(pageMap)
+//            pagingViewModel?.getCookie()
         }
 
     }
