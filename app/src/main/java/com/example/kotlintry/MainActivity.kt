@@ -8,10 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlintry.databinding.ActivityMainBinding
+import com.example.kotlintry.pagingTry.FooterAdapter
 import com.example.kotlintry.pagingTry.PagingViewModel
-import com.example.kotlintry.repositoryAll.repository1.HttpRequestManager
+import com.example.kotlintry.pagingTry.VideoAdapter
 import com.example.kotlintry.viewModel.*
+import kotlinx.coroutines.launch
 
 /**
  * 这个项目主要用来测试封装和kotlin的各种特性
@@ -34,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     private var sixthViewModel : SixthViewModel ?= null
 
     private var pagingViewModel : PagingViewModel ?= null
+
+    private val videoAdapter = VideoAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -84,6 +91,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         pagingViewModel?.getCookie()
+
+        mainBinding?.mainRecycle?.layoutManager = LinearLayoutManager(this)
+        mainBinding?.mainRecycle?.adapter = videoAdapter.withLoadStateFooter(FooterAdapter{
+            videoAdapter.retry()
+        })
+        videoAdapter.addLoadStateListener { 
+            when(it.refresh){
+                is LoadState.NotLoading ->{
+                    
+                }
+                is LoadState.Loading ->{
+                    
+                }
+                is LoadState.Error ->{
+                    val state = it.refresh as LoadState.Error
+                    Log.e(TAG, "onCreate: ${state.error.message}")
+                }
+            }
+        }
     }
 
     inner class ClickProxy{
@@ -146,6 +172,12 @@ class MainActivity : AppCompatActivity() {
             "search_type" to "video")
             pagingViewModel?.getListFlow(pageMap)
 //            pagingViewModel?.getCookie()
+            lifecycleScope.launch {
+                pagingViewModel?.getPagingData()?.collect{pagingData ->
+                    videoAdapter.submitData(pagingData)
+                }
+            }
+
         }
 
     }

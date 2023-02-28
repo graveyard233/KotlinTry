@@ -65,6 +65,7 @@ object PagingRepository : BaseRepository() {
         }.flowOn(Dispatchers.IO)
     }
 
+    // 不懂的可以去看 https://juejin.cn/post/7045304647153614878
     private const val PAGE_SIZE = 10
     fun getPagingData():Flow<PagingData<BilibiliVideo>>{
         return Pager(
