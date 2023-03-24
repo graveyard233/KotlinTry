@@ -5,51 +5,51 @@ import com.example.kotlintry.data.BilibiliMsg
 import com.example.kotlintry.viewModel.DataResult
 import java.net.ConnectException
 import java.net.UnknownHostException
-import kotlin.reflect.full.isSubclassOf
+//import kotlin.reflect.full.isSubclassOf
 
 open class BaseRepository {
-    /**
-     * 使用高阶函数
-     * */
-    suspend inline fun <reified T :Any> launchRequest(
-        crossinline block: suspend () -> BilibiliMsg<T>,
-        noinline onSuccess: ((T?) -> Unit)? = null,
-        noinline onError: ((String) -> Unit)? = null,
-        noinline onComplete: (() -> Unit)? = null
-    ){
-        try {
-            val response = block()
-            when(response.code){
-                0 ->{
-                    val isListType = T::class.isSubclassOf(List::class) // 这里是判断是不是list类型,但现在用不着
-                    if (response.data != null){
-                        onSuccess?.invoke(response.data)
-                    }
-                }
-                else ->{
-                    onError?.invoke(response.message)
-                }
-            }
-            onSuccess?.invoke(response.data)
-        } catch (e: Exception){
-            e.printStackTrace()
-            when (e) {
-                is UnknownHostException -> {
-                    //...
-                }
-                //...  各种需要单独处理的异常
-                is ConnectException -> {
-                    //...
-                }
-                else -> {
-                    //...
-                }
-            }
-            onError?.invoke(e.message!!)
-        } finally {
-            onComplete?.invoke()
-        }
-    }
+//    /**
+//     * 使用高阶函数
+//     * */
+//    suspend inline fun <reified T :Any> launchRequest(
+//        crossinline block: suspend () -> BilibiliMsg<T>,
+//        noinline onSuccess: ((T?) -> Unit)? = null,
+//        noinline onError: ((String) -> Unit)? = null,
+//        noinline onComplete: (() -> Unit)? = null
+//    ){
+//        try {
+//            val response = block()
+//            when(response.code){
+//                0 ->{
+//                    val isListType = T::class.isSubclassOf(List::class) // 这里是判断是不是list类型,但现在用不着
+//                    if (response.data != null){
+//                        onSuccess?.invoke(response.data)
+//                    }
+//                }
+//                else ->{
+//                    onError?.invoke(response.message)
+//                }
+//            }
+//            onSuccess?.invoke(response.data)
+//        } catch (e: Exception){
+//            e.printStackTrace()
+//            when (e) {
+//                is UnknownHostException -> {
+//                    //...
+//                }
+//                //...  各种需要单独处理的异常
+//                is ConnectException -> {
+//                    //...
+//                }
+//                else -> {
+//                    //...
+//                }
+//            }
+//            onError?.invoke(e.message!!)
+//        } finally {
+//            onComplete?.invoke()
+//        }
+//    }
 
 
     suspend inline fun <reified T: Any> launchRequestForResult(

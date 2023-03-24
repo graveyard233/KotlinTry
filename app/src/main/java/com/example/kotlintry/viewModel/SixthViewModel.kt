@@ -24,18 +24,18 @@ class SixthViewModel() : ViewModel() {
 
     val _test: MutableLiveData<DataResult<String>> = MutableLiveData()
 
-    fun getList(map : Map<String,String>){
-        requestMain {
-            repository.getList(map,{
-                _List.postValue(it)
-            },{
-                Log.e(TAG, "getList: $it")
-            },{
-                // 结束时要干的活
-            })
-//            _List.postValue(result.data!!)
-        }
-    }
+//    fun getList(map : Map<String,String>){
+//        requestMain {
+//            repository.getList(map,{
+//                _List.postValue(it)
+//            },{
+//                Log.e(TAG, "getList: $it")
+//            },{
+//                // 结束时要干的活
+//            })
+////            _List.postValue(result.data!!)
+//        }
+//    }
 
     /** 多状态函数返回值*/
     fun getListByResult(map : Map<String,String>){

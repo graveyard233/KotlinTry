@@ -1,8 +1,5 @@
 package com.example.kotlintry.data
 
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = true)
 data class BilibiliMsg<T> (
     val code: Int,
     val message: String,
@@ -10,7 +7,7 @@ data class BilibiliMsg<T> (
     val data: T
 )
 
-@JsonClass(generateAdapter = true)
+
 data class ArchiveData (
     val aids: List<Int>,
     val archives: List<Archive>,
@@ -18,7 +15,6 @@ data class ArchiveData (
     val page: Page
 )
 
-@JsonClass(generateAdapter = true)
 data class Archive (
     val aid: Long,
     val bvid: String,
@@ -33,12 +29,12 @@ data class Archive (
     val ugcPay: Int
 )
 
-@JsonClass(generateAdapter = true)
+
 data class Stat (
     val view: Int
 )
 
-@JsonClass(generateAdapter = true)
+
 data class Meta (
     val category: Long,
     val cover: String,
@@ -50,7 +46,7 @@ data class Meta (
     val total: Int
 )
 
-@JsonClass(generateAdapter = true)
+
 data class Page (
     val pageNum: Int,
     val pageSize: Int,

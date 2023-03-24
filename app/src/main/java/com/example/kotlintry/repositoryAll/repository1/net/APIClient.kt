@@ -8,7 +8,7 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 //import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
+
 import java.util.concurrent.TimeUnit
 
 /**
@@ -73,7 +73,7 @@ class APIClient {
         // 响应方  →
             // Response的事情  回来
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) // RxJava来处理
-            .addConverterFactory(/*GsonConverterFactory*/MoshiConverterFactory.create()) // Gson 来解析 --- JavaBean
+            .addConverterFactory(GsonConverterFactory.create()) // Gson 来解析 --- JavaBean
             .build()
 
         return retrofit.create(apiInterface);

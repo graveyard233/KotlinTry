@@ -3,6 +3,7 @@ package com.example.kotlintry
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -15,6 +16,9 @@ import com.example.kotlintry.databinding.ActivityMainBinding
 import com.example.kotlintry.pagingTry.FooterAdapter
 import com.example.kotlintry.pagingTry.PagingViewModel
 import com.example.kotlintry.pagingTry.VideoAdapter
+import com.example.kotlintry.roomTry.Owner
+import com.example.kotlintry.roomTry.RoomViewModel
+import com.example.kotlintry.roomTry.RoomViewModelFactory
 import com.example.kotlintry.viewModel.*
 import kotlinx.coroutines.launch
 
@@ -40,6 +44,10 @@ class MainActivity : AppCompatActivity() {
 
     private var pagingViewModel : PagingViewModel ?= null
 
+    private val roomViewModel : RoomViewModel by viewModels {
+        RoomViewModelFactory((application as App).roomRepository)
+    }
+
     private val videoAdapter = VideoAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         fifthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[FifthViewModel::class.java]
         sixthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[SixthViewModel::class.java]
         pagingViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[PagingViewModel::class.java]
+
         mainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         mainBinding?.apply {
@@ -172,12 +181,18 @@ class MainActivity : AppCompatActivity() {
             "search_type" to "video")
             pagingViewModel?.getListFlow(pageMap)
 //            pagingViewModel?.getCookie()
-            lifecycleScope.launch {
-                pagingViewModel?.getPagingData()?.collect{pagingData ->
-                    videoAdapter.submitData(pagingData)
-                }
-            }
+//            lifecycleScope.launch {
+//                pagingViewModel?.getPagingData()?.collect{pagingData ->
+//                    videoAdapter.submitData(pagingData)
+//                }
+//            }
 
+        }
+
+        fun useRoomRep(){
+//            roomViewModel.getListFlowByState()
+//            roomViewModel.selectOwner("的")
+            roomViewModel.insertOwner(Owner(13L,"lydd","myFaced"))
         }
 
     }

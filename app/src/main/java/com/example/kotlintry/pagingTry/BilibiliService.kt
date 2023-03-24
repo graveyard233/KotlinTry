@@ -20,7 +20,7 @@ interface BilibiliService {
 ////    "cookie:innersign=0; domain=bilibili.com;  buvid3=469FC80F-9F78-86BB-245E-BE776A7B1AEB46949infoc; expires=Tue, 27 Feb 2024 06:34:06 GMT; domain=bilibili.com; b_nut=1677479646; expires=Tue, 27 Feb 2024 06:34:06 GMT; domain=bilibili.com; "
 //    "cookie:innersign=0;  domain=.bilibili.com, buvid3=3A548F03-AC28-97BF-5F5D-BFFEC0DD137260969infoc;  expires=Tue, 27 Feb 2024 07:52:40 GMT; domain=.bilibili.com, b_nut=1677484360;  expires=Tue, 27 Feb 2024 07:52:40 GMT; domain=.bilibili.com"
 //    )
-    @GET("web-interface/wbi/search/type")
+    @GET("web-interface/search/type")
     suspend fun getSearchList(@QueryMap map: Map<String,String>)
     : BilibiliMsg<VideoSearchData<BilibiliVideo>>
 

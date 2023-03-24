@@ -12,17 +12,17 @@ object BilibiliRepository: BaseRepository(){
 
     var flow = null
 
-    suspend fun getList(
-        map: Map<String,String>,
-        onSuccess: ((ArchiveData?) -> Unit)? = null,
-        onError: ((String) -> Unit)? = null,
-        onComplete: (() -> Unit)? = null
-    ) {
-        launchRequest({
-            ServerApi.service.getListByCoroutine(map)
-        }, onSuccess,onError,onComplete)
-//        return ServerApi.service.getListByCoroutine(map)
-    }
+//    suspend fun getList(
+//        map: Map<String,String>,
+//        onSuccess: ((ArchiveData?) -> Unit)? = null,
+//        onError: ((String) -> Unit)? = null,
+//        onComplete: (() -> Unit)? = null
+//    ) {
+//        launchRequest({
+//            ServerApi.service.getListByCoroutine(map)
+//        }, onSuccess,onError,onComplete)
+////        return ServerApi.service.getListByCoroutine(map)
+//    }
 
     suspend fun getListByResult(map: Map<String,String>)
     : DataResult<ArchiveData> {
