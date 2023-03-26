@@ -12,7 +12,7 @@ class App:Application() {
     }
 
     val roomRepository by lazy {
-        RoomRepository(videoDB.videoDao(),videoDB.ownerDao())
+        RoomRepository(videoDB.videoDao(),videoDB.ownerDao(),videoDB.personDao(),videoDB.bookDao())
     }
 
     override fun onCreate() {

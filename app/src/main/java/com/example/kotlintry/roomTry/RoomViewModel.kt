@@ -51,6 +51,12 @@ class RoomViewModel(private val repository : RoomRepository) : ViewModel() {
         }
     }
 
+    fun initTestTable(){
+        viewModelScope.launch {
+            repository.initTestTable()
+        }
+    }
+
 }
 
 class RoomViewModelFactory(private val repository: RoomRepository): ViewModelProvider.Factory{

@@ -5,7 +5,8 @@ import com.example.kotlintry.viewModel.DataResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
-class RoomRepository(private val videoDAO: PreciousVideoDAO,private val ownerDao: OwnerDAO) {
+class RoomRepository(private val videoDAO: PreciousVideoDAO,private val ownerDao: OwnerDAO,
+                     private val personDAO: PersonDAO,private val bookDAO: BookDAO) {
     val TAG: String = javaClass.simpleName
 
 
@@ -67,5 +68,24 @@ class RoomRepository(private val videoDAO: PreciousVideoDAO,private val ownerDao
 
     suspend fun insertOwner(owner: Owner){
         ownerDao.upsertOne(owner)
+    }
+
+    suspend fun initTestTable(){
+        personDAO.run {
+            try {
+                clearPerson()
+                insertPerson(DataGenerator.generatePerson())// 注意
+            }catch (e :Exception){
+                Log.e(TAG, "init person: ", e)
+            }
+        }
+        try {
+            bookDAO.run {
+                clearBook()
+                upsertBook(DataGenerator.generateBook())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "init book: ", e)
+        }
     }
 }

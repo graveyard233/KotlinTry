@@ -193,6 +193,7 @@ class MainActivity : AppCompatActivity() {
 //            roomViewModel.getListFlowByState()
 //            roomViewModel.selectOwner("的")
             roomViewModel.insertOwner(Owner(13L,"lydd","myFaced"))
+//            roomViewModel.initTestTable()
         }
 
     }
