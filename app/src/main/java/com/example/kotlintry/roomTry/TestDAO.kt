@@ -11,6 +11,9 @@ interface PersonDAO {
     @Query("delete from person_tb")
     suspend fun clearPerson()
 
+    @Query("select * from person_tb")
+    suspend fun getAllPerson() :List<Person>
+
 }
 
 @Dao

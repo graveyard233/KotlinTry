@@ -37,6 +37,7 @@ interface OwnerDAO{
     @Query("SELECT * FROM owner WHERE name like '%'||:name||'%'")
     fun selectByParam(name :String) :Flow<List<Owner>>
 
-
+    @Query("select * from owner")
+    suspend fun getAllOwner() :List<Owner>
 }
 

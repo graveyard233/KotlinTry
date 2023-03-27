@@ -1,10 +1,12 @@
 package com.example.kotlintry.roomTry
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.kotlintry.viewModel.DataResult
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -54,6 +56,44 @@ class RoomViewModel(private val repository : RoomRepository) : ViewModel() {
     fun initTestTable(){
         viewModelScope.launch {
             repository.initTestTable()
+        }
+    }
+
+
+    val personLiveData :MutableLiveData<List<Person>> = MutableLiveData()
+    fun getAllPerson(){
+        viewModelScope.launch {
+            repository.getPersonFromRoom().collect(){
+                when(it){
+                    is DataResult.Success ->{
+                        personLiveData.postValue(it.data!!)
+                    }
+                    is DataResult.Error ->{
+                        Log.e(TAG, "getAllPerson: ${it.error}")
+                    }
+                }
+            }
+        }
+    }
+
+
+    val ownerSharedFlow :MutableSharedFlow<List<Owner>> = MutableSharedFlow(replay = 1/*, extraBufferCapacity = 1*/)
+    var count = 1
+
+    fun getAllOwner(){
+        viewModelScope.launch {
+            repository.getOwner().collect(){
+                Log.i(TAG, "getAllOwner: 接收到 ${count++} 次")
+                when(it){
+                    is DataResult.Success ->{
+                        Log.i(TAG, "getAllOwner: 有数据->${it.data}")
+                        ownerSharedFlow.emit(it.data)
+                    }
+                    is DataResult.Error ->{
+                        Log.e(TAG, "getAllOwner: ${it.error}")
+                    }
+                }
+            }
         }
     }
 

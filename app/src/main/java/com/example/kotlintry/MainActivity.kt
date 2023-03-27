@@ -16,10 +16,9 @@ import com.example.kotlintry.databinding.ActivityMainBinding
 import com.example.kotlintry.pagingTry.FooterAdapter
 import com.example.kotlintry.pagingTry.PagingViewModel
 import com.example.kotlintry.pagingTry.VideoAdapter
-import com.example.kotlintry.roomTry.Owner
-import com.example.kotlintry.roomTry.RoomViewModel
-import com.example.kotlintry.roomTry.RoomViewModelFactory
+import com.example.kotlintry.roomTry.*
 import com.example.kotlintry.viewModel.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -49,6 +48,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val videoAdapter = VideoAdapter(this)
+
+    private val personAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        RoomPersonAdapter()
+    }
+
+    private val ownerAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        RoomOwnerAdapter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -102,23 +109,40 @@ class MainActivity : AppCompatActivity() {
         pagingViewModel?.getCookie()
 
         mainBinding?.mainRecycle?.layoutManager = LinearLayoutManager(this)
-        mainBinding?.mainRecycle?.adapter = videoAdapter.withLoadStateFooter(FooterAdapter{
-            videoAdapter.retry()
-        })
-        videoAdapter.addLoadStateListener { 
-            when(it.refresh){
-                is LoadState.NotLoading ->{
-                    
-                }
-                is LoadState.Loading ->{
-                    
-                }
-                is LoadState.Error ->{
-                    val state = it.refresh as LoadState.Error
-                    Log.e(TAG, "onCreate: ${state.error.message}")
-                }
+
+        mainBinding?.mainRecycle?.adapter = ownerAdapter
+
+        lifecycleScope.launch {
+            roomViewModel.ownerSharedFlow.collect(){
+                Log.i(TAG, "onCreate: 接收到sharedFlow数据")
+                ownerAdapter.submitList(it)
             }
         }
+
+        // 使用person
+//        mainBinding?.mainRecycle?.adapter = personAdapter
+//        roomViewModel.personLiveData.observe(this){
+//            personAdapter.submitList(it)
+//        }
+
+        // 这里是paging的adapter，要看的时候就取消注释就行
+//        mainBinding?.mainRecycle?.adapter = videoAdapter.withLoadStateFooter(FooterAdapter{
+//            videoAdapter.retry()
+//        })
+//        videoAdapter.addLoadStateListener {
+//            when(it.refresh){
+//                is LoadState.NotLoading ->{
+//
+//                }
+//                is LoadState.Loading ->{
+//
+//                }
+//                is LoadState.Error ->{
+//                    val state = it.refresh as LoadState.Error
+//                    Log.e(TAG, "onCreate: ${state.error.message}")
+//                }
+//            }
+//        }
     }
 
     inner class ClickProxy{
@@ -192,8 +216,10 @@ class MainActivity : AppCompatActivity() {
         fun useRoomRep(){
 //            roomViewModel.getListFlowByState()
 //            roomViewModel.selectOwner("的")
-            roomViewModel.insertOwner(Owner(13L,"lydd","myFaced"))
+//            roomViewModel.insertOwner(Owner(13L,"lydd","myFaced"))
 //            roomViewModel.initTestTable()
+//            roomViewModel.getAllPerson()
+            roomViewModel.getAllOwner()
         }
 
     }
