@@ -8,7 +8,7 @@ import com.example.kotlintry.data.ArchiveData
 import com.example.kotlintry.repositoryAll.repository1.HttpRequestManager
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel : ViewModel() {
+class FirstViewModel : ViewModel() {
 
     companion object{
         @JvmField

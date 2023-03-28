@@ -5,222 +5,58 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.kotlintry.databinding.ActivityMainBinding
-import com.example.kotlintry.pagingTry.FooterAdapter
 import com.example.kotlintry.pagingTry.PagingViewModel
 import com.example.kotlintry.pagingTry.VideoAdapter
 import com.example.kotlintry.roomTry.*
+import com.example.kotlintry.ui.base.BaseActivity
 import com.example.kotlintry.viewModel.*
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
  * 这个项目主要用来测试封装和kotlin的各种特性
  * */
 
-//    https://api.bilibili.com/x/polymer/space/seasons_archives_list?mid=11736402&season_id=23870&sort_reverse=false&page_num=1&page_size=30
-
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     companion object{
-        const val TAG = "MainActivity"
+        private const val TAG = "MainActivity"
     }
 
     private var mainBinding : ActivityMainBinding ?= null
 
-    private var mainViewModel : MainActivityViewModel ?= null
-    private var secondViewModel : SecondViewModel ?= null
-    private var thirdViewModel : ThirdViewModel ?= null
-    private var fourthViewModel : FourthViewModel ?= null
-    private var fifthViewModel : FifthViewModel ?= null
-    private var sixthViewModel : SixthViewModel ?= null
-
-    private var pagingViewModel : PagingViewModel ?= null
-
-    private val roomViewModel : RoomViewModel by viewModels {
-        RoomViewModelFactory((application as App).roomRepository)
-    }
-
-    private val videoAdapter = VideoAdapter(this)
-
-    private val personAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        RoomPersonAdapter()
-    }
-
-    private val ownerAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        RoomOwnerAdapter()
-    }
+    private var navController :NavController ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
 
-        mainViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[MainActivityViewModel::class.java]
-        secondViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[SecondViewModel::class.java]
-        thirdViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[ThirdViewModel::class.java]
-        fourthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[FourthViewModel::class.java]
-        fifthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[FifthViewModel::class.java]
-        sixthViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[SixthViewModel::class.java]
-        pagingViewModel = ViewModelProvider(this,this.defaultViewModelProviderFactory)[PagingViewModel::class.java]
-
         mainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         mainBinding?.apply {
             lifecycleOwner = this@MainActivity
-            vm = mainViewModel
+//            vm = firstViewModel
             click = ClickProxy()
         }
 
-        mainViewModel?.listData?.observe(this){
-//            Log.i(TAG, "onCreate: ${it.archives}")
-            mainBinding!!.textView1.text = it.archives.toString()
-        }
 
-        secondViewModel?.listData?.observe(this){
-//            Log.i(TAG, "onCreate: ${it.archives}")
-            mainBinding!!.textView1.text = it.archives.toString()
-        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_fragment_nav_host) as NavHostFragment
+        navController = navHostFragment.navController
+        mainBinding?.mainNavView?.setupWithNavController(navController!!)
 
-        thirdViewModel?.listData?.observe(this){
-//            Log.i(TAG, "onCreate: ${it.archives}")
-            mainBinding!!.textView1.text = it.archives.toString()
-        }
+        val appBarConfiguration = AppBarConfiguration(navController!!.graph, drawerLayout = mainBinding?.mainDrawer)
+        mainBinding?.mainToolbar?.setupWithNavController(navController!!,appBarConfiguration)
 
-        fourthViewModel?.listData?.observe(this){
-//            Log.i(TAG, "onCreate: ${it.archives}")
-            mainBinding!!.textView1.text = it.archives.toString()
-        }
-        fifthViewModel?.listData?.observe(this){ result ->
-            result.onSuccess {
-                mainBinding!!.textView1.text = it.archives.toString()
-            }
-        }
-        sixthViewModel?.listData?.observe(this){
-//            Log.i(TAG, "onCreate: ${it.archives}")
-            mainBinding!!.textView1.text = it.archives.toString()
-        }
-
-        pagingViewModel?.getCookie()
-
-        mainBinding?.mainRecycle?.layoutManager = LinearLayoutManager(this)
-
-        mainBinding?.mainRecycle?.adapter = ownerAdapter
-
-        lifecycleScope.launch {
-            roomViewModel.ownerSharedFlow.collect(){
-                Log.i(TAG, "onCreate: 接收到sharedFlow数据")
-                ownerAdapter.submitList(it)
-            }
-        }
-
-        // 使用person
-//        mainBinding?.mainRecycle?.adapter = personAdapter
-//        roomViewModel.personLiveData.observe(this){
-//            personAdapter.submitList(it)
-//        }
-
-        // 这里是paging的adapter，要看的时候就取消注释就行
-//        mainBinding?.mainRecycle?.adapter = videoAdapter.withLoadStateFooter(FooterAdapter{
-//            videoAdapter.retry()
-//        })
-//        videoAdapter.addLoadStateListener {
-//            when(it.refresh){
-//                is LoadState.NotLoading ->{
-//
-//                }
-//                is LoadState.Loading ->{
-//
-//                }
-//                is LoadState.Error ->{
-//                    val state = it.refresh as LoadState.Error
-//                    Log.e(TAG, "onCreate: ${state.error.message}")
-//                }
-//            }
-//        }
     }
 
     inner class ClickProxy{
-        fun useRep1(){
-            mainViewModel?.getListByCoroutine(mapOf("mid" to "11736402","season_id" to "23870",
-                "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
-        }
-
-        fun useRep2(){
-            secondViewModel?.getList(mapOf("mid" to "11736402","season_id" to "23870",
-                "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
-            {
-                Log.i(TAG, "useRep2: success invoke")
-            }
-        }
-
-        fun useRep3(){
-//            thirdViewModel?.getListByCoroutine(mapOf("mid" to "11736402","season_id" to "23870",
-//                "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
-            thirdViewModel?.getListByFlow(mapOf("mid" to "11736402","season_id" to "23870",
-                "sort_reverse" to "false","page_num" to "1","page_size" to "30"),
-                {
-                    Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT).show()
-                },
-                {
-                    Log.i(TAG, "useRep3: error") // 这里可写可不写
-                })
-        }
-
-        fun useRep4(){
-            fourthViewModel?.getList(mapOf("mid" to "11736402","season_id" to "23870",
-                "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
-        }
-
-        fun useRep5(){
-            fifthViewModel?.getList(mapOf("mid" to "11736402","season_id" to "23870",
-                "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
-        }
-
-        fun useRep6(){
-//            sixthViewModel?.getListFlow/*getListByT*/ /*getListByResult*/ /*getList*/ (mapOf("mid" to "11736402","season_id" to "23870",
-//                "sort_reverse" to "false","page_num" to "1","page_size" to "30"))
-            sixthViewModel?.getListFlowByState(
-                mapOf("mid" to "11736402","season_id" to "23870",
-                    "sort_reverse" to "false","page_num" to "1","page_size" to "30"),
-                ifSuccess = {
-                    Toast.makeText(this@MainActivity,"success",Toast.LENGTH_SHORT ).show()
-                },
-                ifError = {
-                    Log.e(TAG, "useRep6: $it?")
-                }
-            )
-        }
-
-        fun usePagingRep(){
-            val pageMap = mutableMapOf("page" to "1",
-                "page_size" to "10",
-            "order" to "pubdate",
-            "keyword" to "赦免者",
-            "search_type" to "video")
-            pagingViewModel?.getListFlow(pageMap)
-//            pagingViewModel?.getCookie()
-//            lifecycleScope.launch {
-//                pagingViewModel?.getPagingData()?.collect{pagingData ->
-//                    videoAdapter.submitData(pagingData)
-//                }
-//            }
-
-        }
-
-        fun useRoomRep(){
-//            roomViewModel.getListFlowByState()
-//            roomViewModel.selectOwner("的")
-//            roomViewModel.insertOwner(Owner(13L,"lydd","myFaced"))
-//            roomViewModel.initTestTable()
-//            roomViewModel.getAllPerson()
-            roomViewModel.getAllOwner()
-        }
 
     }
 

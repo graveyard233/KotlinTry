@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_repository"
+        android:title="仓库层"/>
+
+    <item
+        android:id="@+id/nav_paging"
+        android:title="Paging"/>
+
+    <item
+        android:id="@+id/nav_room"
+        android:title="Room"/>
+
+
+</menu>
