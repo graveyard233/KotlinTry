@@ -36,6 +36,7 @@ class OwnerFragment:BaseFragment() {
 
     private var recycler :RecyclerView ?= null
     private var btn_get :Button ?= null
+    private var btn_select :Button ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +48,7 @@ class OwnerFragment:BaseFragment() {
         view.apply {
             recycler = findViewById(R.id.owner_recycle)
             btn_get = findViewById(R.id.owner_btn_get)
+            btn_select = findViewById(R.id.owner_btn_select)
         }
         return view
     }
@@ -60,6 +62,9 @@ class OwnerFragment:BaseFragment() {
         }
         btn_get?.setOnClickListener {
             roomViewModel.getAllOwner()
+        }
+        btn_select?.setOnClickListener {
+            roomViewModel.selectOwner("的")
         }
         lifecycleScope.launch {
             roomViewModel.ownerSharedFlow.collect(){

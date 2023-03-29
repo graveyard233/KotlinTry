@@ -51,7 +51,7 @@ class MainActivity : BaseActivity() {
         navController = navHostFragment.navController
         mainBinding?.mainNavView?.setupWithNavController(navController!!)
 
-        val appBarConfiguration = AppBarConfiguration(navController!!.graph, drawerLayout = mainBinding?.mainDrawer)
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_paging,R.id.nav_repository,R.id.nav_room), drawerLayout = mainBinding?.mainDrawer)
         mainBinding?.mainToolbar?.setupWithNavController(navController!!,appBarConfiguration)
 
     }

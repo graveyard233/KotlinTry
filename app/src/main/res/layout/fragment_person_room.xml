@@ -25,12 +25,12 @@
             android:text="getPerson" />
 
         <Button
-            android:id="@+id/person_btn_doOther"
+            android:id="@+id/person_btn_initTable"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="do other thing" />
+            android:text="initTable" />
 
     </LinearLayout>
 

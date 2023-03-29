@@ -11,10 +11,15 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RoomViewModel(private val repository : RoomRepository) : ViewModel() {
-
-    companion object{
-        const val TAG = "RoomViewModel"
+    override fun onCleared() {
+        super.onCleared()
+        Log.i(TAG, "onCleared: ")//由于我是和fragment的生命周期绑定，所以当fragment被navigation销毁时，这个也会被临时销毁，但还是同一个单例
     }
+
+    private val TAG = "${javaClass.simpleName}-${javaClass.hashCode()}"
+//    companion object{
+//        const val TAG = "RoomViewModel"
+//    }
 
     fun getListFlowByState(
         ifSuccess: () -> Any? = {  },
@@ -66,6 +71,7 @@ class RoomViewModel(private val repository : RoomRepository) : ViewModel() {
             repository.getPersonFromRoom().collect(){
                 when(it){
                     is DataResult.Success ->{
+                        Log.i(TAG, "getAllPerson: success")
                         personLiveData.postValue(it.data!!)
                     }
                     is DataResult.Error ->{

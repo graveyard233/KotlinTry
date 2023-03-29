@@ -25,12 +25,12 @@
             android:text="getOwner" />
 
         <Button
-            android:id="@+id/owner_btn_doOther"
+            android:id="@+id/owner_btn_select"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="do other thing" />
+            android:text="selectOwner" />
 
     </LinearLayout>
 

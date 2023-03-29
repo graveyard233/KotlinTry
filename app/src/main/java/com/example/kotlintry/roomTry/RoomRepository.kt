@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.*
 
 class RoomRepository(private val videoDAO: PreciousVideoDAO,private val ownerDao: OwnerDAO,
                      private val personDAO: PersonDAO,private val bookDAO: BookDAO) {
-    val TAG: String = javaClass.simpleName
+    val TAG: String = "${javaClass.simpleName}-${javaClass.hashCode()}"
 
 
 
@@ -93,6 +93,7 @@ class RoomRepository(private val videoDAO: PreciousVideoDAO,private val ownerDao
     :Flow<DataResult<List<Person>>>
     {
         return flow<DataResult<List<Person>>> {
+            Log.i(TAG, "getPersonFromRoom: 用于查看是不是同一个仓库层")
             emit(DataResult.Success(personDAO.getAllPerson()))
         }.catch {
             emit(DataResult.Error(it.message!!))

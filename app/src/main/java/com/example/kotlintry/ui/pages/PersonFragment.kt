@@ -30,6 +30,7 @@ class PersonFragment:BaseFragment() {
 
     private var recycler :RecyclerView ?= null
     private var btn_get :Button ?= null
+    private var btn_init :Button ?= null
 
 
     override fun onCreateView(
@@ -42,6 +43,7 @@ class PersonFragment:BaseFragment() {
         view?.apply {
             recycler = findViewById(R.id.person_recycle)
             btn_get = findViewById(R.id.person_btn_get)
+            btn_init = findViewById(R.id.person_btn_initTable)
         }
 
         return view
@@ -56,6 +58,9 @@ class PersonFragment:BaseFragment() {
         }
         btn_get?.setOnClickListener {
             roomViewModel.getAllPerson()
+        }
+        btn_init?.setOnClickListener {
+            roomViewModel.initTestTable()
         }
 
         roomViewModel.personLiveData.observe(viewLifecycleOwner){
