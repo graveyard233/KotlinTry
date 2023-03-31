@@ -21,10 +21,27 @@
         android:id="@+id/ownerFragment"
         android:name="com.example.kotlintry.ui.pages.OwnerFragment"
         android:label="OwnerFragment"
-        tools:layout="@layout/fragment_owner_room"/>
+        tools:layout="@layout/fragment_owner_room">
+        <action
+            android:id="@+id/action_ownerFragment_to_showDetailFragment"
+            app:destination="@id/showDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/personFragment"
         android:name="com.example.kotlintry.ui.pages.PersonFragment"
         android:label="PersonFragment"
-        tools:layout="@layout/fragment_person_room"/>
+        tools:layout="@layout/fragment_person_room">
+        <action
+            android:id="@+id/action_personFragment_to_showDetailFragment"
+            app:destination="@id/showDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showDetailFragment"
+        android:name="com.example.kotlintry.ui.pages.ShowDetailFragment"
+        android:label="ShowDetailFragment"
+        tools:layout="@layout/fragment_show_detail">
+        <argument
+            android:name="sealClass"
+            app:argType="com.example.kotlintry.roomTry.ArgTry" />
+    </fragment>
 </navigation>

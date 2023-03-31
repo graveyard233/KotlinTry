@@ -3,6 +3,10 @@ package com.example.kotlintry.ui.base
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,18 +17,45 @@ import com.example.kotlintry.App
 
 open class BaseFragment : Fragment() {
 
+    protected val TAG: String = this.javaClass.simpleName
+
     protected var mActivity: AppCompatActivity? = null // 为了 让所有的子类 持有 Activity
     // private var _sharedViewModel: SharedViewModel
     // 贯穿整个项目的（只会让App(Application)初始化一次）
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i(TAG, "onCreate: ")
 
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mActivity = context as AppCompatActivity
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.i(TAG, "onCreateView: ")
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.i(TAG, "onViewCreated: ")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.e(TAG, "onDestroyView: ")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG, "onDestroy: ")
     }
 
     // 测试用的，暂无用

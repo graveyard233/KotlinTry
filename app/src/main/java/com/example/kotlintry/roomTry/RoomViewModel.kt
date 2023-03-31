@@ -1,16 +1,14 @@
 package com.example.kotlintry.roomTry
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.kotlintry.viewModel.DataResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class RoomViewModel(private val repository : RoomRepository) : ViewModel() {
+class RoomViewModel(private val repository : RoomRepository,private val state :SavedStateHandle) : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         Log.i(TAG, "onCleared: ")//由于我是和fragment的生命周期绑定，所以当fragment被navigation销毁时，这个也会被临时销毁，但还是同一个单例
@@ -66,13 +64,19 @@ class RoomViewModel(private val repository : RoomRepository) : ViewModel() {
 
 
     val personLiveData :MutableLiveData<List<Person>> = MutableLiveData()
+
+    // 这里能拿到saveStateHandler的数据，这样即使app收到后台，旧了之后进程被杀掉，也能恢复，但注意不要放太多数据
+    // 一般来说，除了从数据库拿数据之外，也可以靠这个来恢复数据，但界面状态就比较难恢复
+    val personStateLiveData  = state.getLiveData<List<Person>>("personList")
+
     fun getAllPerson(){
         viewModelScope.launch {
             repository.getPersonFromRoom().collect(){
                 when(it){
                     is DataResult.Success ->{
                         Log.i(TAG, "getAllPerson: success")
-                        personLiveData.postValue(it.data!!)
+//                        personLiveData.postValue(it.data!!)
+                        state["personList"] = it.data
                     }
                     is DataResult.Error ->{
                         Log.e(TAG, "getAllPerson: ${it.error}")
@@ -106,10 +110,11 @@ class RoomViewModel(private val repository : RoomRepository) : ViewModel() {
 }
 
 class RoomViewModelFactory(private val repository: RoomRepository): ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         if (modelClass.isAssignableFrom(RoomViewModel::class.java)){
+            val savedStateHandle = extras.createSavedStateHandle()
             @Suppress("UNCHECKED_CAST")
-            return RoomViewModel(repository) as T
+            return RoomViewModel(repository,savedStateHandle) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

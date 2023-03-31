@@ -12,17 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlintry.App
 import com.example.kotlintry.R
-import com.example.kotlintry.roomTry.RoomOwnerAdapter
-import com.example.kotlintry.roomTry.RoomViewModel
-import com.example.kotlintry.roomTry.RoomViewModelFactory
+import com.example.kotlintry.roomTry.*
 import com.example.kotlintry.ui.base.BaseFragment
 import com.example.kotlintry.ui.state.OwnerState
 import kotlinx.coroutines.launch
 
 class OwnerFragment:BaseFragment() {
-    companion object{
-        private const val TAG = "OwnerFragment"
-    }
 
     private val ownerState :OwnerState by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         getFragmentViewModelProvider(this)[OwnerState::class.java]
@@ -31,7 +26,12 @@ class OwnerFragment:BaseFragment() {
         RoomViewModelFactory((mActivity?.application as App).roomRepository)
     }
     private val ownerAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        RoomOwnerAdapter()
+        RoomOwnerAdapter().apply {
+            setOnItemClickListener{ adapter, _, position ->
+                val action = OwnerFragmentDirections.actionOwnerFragmentToShowDetailFragment(ArgOwner(adapter.getItem(position)!!))
+                nav().navigate(action)
+            }
+        }
     }
 
     private var recycler :RecyclerView ?= null

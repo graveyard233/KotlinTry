@@ -1,7 +1,9 @@
 package com.example.kotlintry.roomTry
 
+import android.os.Parcelable
 import androidx.room.*
 import androidx.room.ForeignKey.Companion.CASCADE
+import kotlinx.android.parcel.Parcelize
 
 //{
 //    "code":0,
@@ -149,12 +151,12 @@ data class Dimension (
     var height: Long,
     var rotate: Long
 )
-
+@Parcelize
 @Entity(tableName = "owner")
 data class Owner (
     @PrimaryKey
     var mid: Long,
     var name: String,
     var face: String
-)
+) : Parcelable
 

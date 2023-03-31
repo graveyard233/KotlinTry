@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id("com.google.devtools.ksp")//.version("1.6.21-1.0.6") // Or latest version of KSP 给moshi用的
+    id 'kotlin-parcelize'// 序列化用的
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -100,7 +102,7 @@ dependencies {
     // room
     String room_version = "2.5.0"
     implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+//    annotationProcessor("androidx.room:room-compiler:$room_version")
     // To use Kotlin Symbol Processing (KSP)
     ksp("androidx.room:room-compiler:$room_version")
     // optional - Kotlin Extensions and Coroutines support for Room

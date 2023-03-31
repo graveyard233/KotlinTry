@@ -1,6 +1,7 @@
 package com.example.kotlintry.ui.pages
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,22 +11,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlintry.App
 import com.example.kotlintry.R
-import com.example.kotlintry.roomTry.RoomPersonAdapter
-import com.example.kotlintry.roomTry.RoomViewModel
-import com.example.kotlintry.roomTry.RoomViewModelFactory
+import com.example.kotlintry.roomTry.*
 import com.example.kotlintry.ui.base.BaseFragment
 
 class PersonFragment:BaseFragment() {
-
-    companion object{
-        private const val TAG = "PersonFragment"
-    }
 
     private val roomViewModel : RoomViewModel by viewModels {
         RoomViewModelFactory((mActivity?.application as App).roomRepository)
     }
     private val personAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        RoomPersonAdapter()
+        RoomPersonAdapter().apply {
+            setOnItemClickListener{adapter,_,position ->
+                val action = PersonFragmentDirections.actionPersonFragmentToShowDetailFragment(ArgPerson(adapter.getItem(position)!!))
+                nav().navigate(action)
+            }
+        }
     }
 
     private var recycler :RecyclerView ?= null
@@ -63,7 +63,15 @@ class PersonFragment:BaseFragment() {
             roomViewModel.initTestTable()
         }
 
-        roomViewModel.personLiveData.observe(viewLifecycleOwner){
+//        roomViewModel.personLiveData.observe(viewLifecycleOwner){
+//            personAdapter.submitList(it)
+//        }
+
+        // 默认是ALLOW，可以立即恢复状态；若设置为PREVENT_WHEN_EMPTY则可以实现异步加载也能恢复滚动状态
+//        personAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
+        roomViewModel.personStateLiveData.observe(viewLifecycleOwner){
+            Log.i(TAG, "onViewCreated: get personStateLiveData")
             personAdapter.submitList(it)
         }
     }

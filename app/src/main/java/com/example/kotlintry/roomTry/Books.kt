@@ -1,10 +1,13 @@
 package com.example.kotlintry.roomTry
 
+import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "person_tb")
 data class Person(
     @PrimaryKey
@@ -13,7 +16,7 @@ data class Person(
     val age :Int
 //    @Embedded
 //    val book :Book
-)
+) : Parcelable
 
 @Entity(tableName = "book_tb",
 foreignKeys = [ForeignKey(entity = Person::class,

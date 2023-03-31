@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.example.kotlintry.R
+import com.example.kotlintry.roomTry.ArgPerson
+import com.example.kotlintry.roomTry.Person
 import com.example.kotlintry.ui.base.BaseFragment
 
 class RoomFragment:BaseFragment() {
-    companion object{
-        private const val TAG = "RoomFragment"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

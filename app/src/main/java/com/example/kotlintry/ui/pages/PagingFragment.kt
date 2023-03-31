@@ -18,9 +18,6 @@ import com.example.kotlintry.ui.state.PagingState
 import kotlinx.coroutines.launch
 
 class PagingFragment :BaseFragment() {
-    companion object{
-        private const val TAG = "PagingFragment"
-    }
 
     private var pagingBinding :FragmentPagingBinding ?= null
     private val pagingState:PagingState by lazy(LazyThreadSafetyMode.SYNCHRONIZED){

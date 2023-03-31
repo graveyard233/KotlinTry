@@ -17,10 +17,6 @@ import com.example.kotlintry.viewModel.*
 
 class RepositoryFragment : BaseFragment(){
 
-    companion object{
-        private const val TAG = "RepositoryFragment"
-    }
-
     private var repositoryBinding :FragmentRepositoryBinding ?= null
     private val repositoryState :RepositoryState by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         getFragmentViewModelProvider(this)[RepositoryState::class.java]
