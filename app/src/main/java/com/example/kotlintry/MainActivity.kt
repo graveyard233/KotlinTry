@@ -19,12 +19,13 @@ import com.example.kotlintry.pagingTry.VideoAdapter
 import com.example.kotlintry.roomTry.*
 import com.example.kotlintry.ui.base.BaseActivity
 import com.example.kotlintry.viewModel.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * 这个项目主要用来测试封装和kotlin的各种特性
  * */
-
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
     companion object{
         private const val TAG = "MainActivity"
@@ -51,7 +52,7 @@ class MainActivity : BaseActivity() {
         navController = navHostFragment.navController
         mainBinding?.mainNavView?.setupWithNavController(navController!!)
 
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_paging,R.id.nav_repository,R.id.nav_room), drawerLayout = mainBinding?.mainDrawer)
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.nav_paging,R.id.nav_repository,R.id.nav_room,R.id.nav_hilt), drawerLayout = mainBinding?.mainDrawer)
         mainBinding?.mainToolbar?.setupWithNavController(navController!!,appBarConfiguration)
 
     }

@@ -10,7 +10,9 @@ import com.example.kotlintry.roomTry.RoomRepository
 import com.example.kotlintry.roomTry.VideoDatabase
 import com.example.kotlintry.utils.Utils
 import com.tencent.mmkv.MMKV
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class App:Application(), ViewModelStoreOwner {
 
     private var mAppViewModelStore: ViewModelStore? = null
