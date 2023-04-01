@@ -12,6 +12,8 @@ import com.example.kotlintry.hiltTry.Car
 import com.example.kotlintry.hiltTry.HiltViewModel
 import com.example.kotlintry.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,6 +27,12 @@ class HiltFragment: BaseFragment() {
     // 注意，注入的类不能为private，但类里面可以有private
     @Inject
     lateinit var car :Car
+
+    @Inject
+    lateinit var okHttpClient: OkHttpClient
+
+    @Inject
+    lateinit var retrofit: Retrofit
 
     override fun onCreateView(
         inflater: LayoutInflater,
