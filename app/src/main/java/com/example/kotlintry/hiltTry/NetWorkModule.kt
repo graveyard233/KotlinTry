@@ -4,15 +4,19 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityComponent::class)
-class NetWorkModule {
+//@InstallIn(ActivityComponent::class)
+@InstallIn(SingletonComponent::class)// 可以在项目的全局使用 包括activity和service,而且是全局单例
+/*class*/object NetWorkModule {
 
+    @Singleton// 不写上面的SingletonComponent就是局部单例
     @Provides
     fun provideOkHttpClient() : OkHttpClient{
         return OkHttpClient.Builder()
@@ -22,6 +26,7 @@ class NetWorkModule {
             .build()
     }
 
+    @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient):Retrofit{
         return Retrofit.Builder()
